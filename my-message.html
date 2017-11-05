@@ -1,0 +1,107 @@
+<link rel="import" href="bower_components/polymer/polymer-element.html">
+<link rel="import" href="my-carousel.html">
+<link rel="import" href="my-uploader.html">
+<script src="MessageHolder.js"></script>
+<dom-module id="my-message">
+  <template>
+
+    <style>
+		* {
+			font-size: 100%;
+			font-family: Segoe UI;
+		}
+      my-carousel{
+        width: 50vw;
+		height:28vw;
+        contain: contend;
+		margin-left:auto;
+		margin-right:auto;
+      }
+
+      my-carousel::after{
+        display: block;
+        content: '';
+        padding-top: 75%;
+      }
+
+      my-carousel img{
+        position: absolute;
+        width: 50vw;
+      }
+	  
+	  
+	  .parent{
+		position: relative;
+		display:block;
+		margin: 5px;
+		border: 1px solid #ccc;
+		width: 100vw;
+		height:28vw;
+		background-color:black;
+	  }
+	  
+	  .carousel-message{
+		position: absolute;
+		right: 0;
+		bottom: 1rem;
+		left: 0;
+		background-color: rgba(0,0,0,0.7);
+		height:3rem;
+		color:white;
+		text-align:center;
+		box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.66);
+		margin-left:auto;
+		margin-right:auto;
+		width:50vw;
+	  }
+    </style>
+
+	<div class="parent">
+    <my-carousel id="yuta">
+      <img data-src="image/wallpaper1.jpg">
+      <img data-src="image/wallpaper2.jpg">
+      <img data-src="image/wallpaper3.jpg">
+      <img data-src="image/wallpaper4.jpg">
+	  
+    </my-carousel>
+
+	<div class="carousel-message"><p>{{message}}</p></div>
+	</div>
+    <my-uploader></my-uploader>
+  </template>
+
+  <script>
+    class MyMessage extends Polymer.Element{
+      static get is(){return 'my-message';}
+
+      static get properties(){
+        return{
+          message: {
+            type: String
+          }
+        }
+      }
+
+      ready(){
+        super.ready();
+        this.message = MessageHolder.getInstance().get();
+      }
+
+    }
+
+    customElements.define(MyMessage.is, MyMessage);
+  </script>
+
+  <script>
+    document.querySelector('my-message').addEventListener('kick', function(e){
+      var action = e.detail.action;
+      var path = e.detail.path;
+      if(action == false){
+        var image = document.createElement('img');
+        image.src = path;
+        this.$.yuta.appendChild(image);
+      }
+      this.message = MessageHolder.getInstance().get();
+    });
+</script>
+</dom-module>

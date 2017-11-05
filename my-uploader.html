@@ -1,0 +1,132 @@
+<link rel="import" href="bower_components/polymer/polymer-element.html">
+<link rel="import" href="bower_components/vaadin-upload/vaadin-upload.html">
+<link rel="import" href="bower_components/paper-input/paper-input.html">
+<link rel="import" href="bower_components/paper-button/paper-button.html">
+<script src="MessageHolder.js"></script>
+<script src="Mock.js"></script>
+<script src="jquery-3.2.1.min.js"></script>    
+<dom-module id="my-uploader">
+  <template>
+
+    <style>
+      paper-button.custom {
+    --paper-button-ink-color: var(--paper-pink-a200);
+    /* These could also be individually defined for each of the
+      specific css classes, but we'll just do it once as an example */
+    --paper-button-flat-keyboard-focus: {
+      background-color: var(--paper-pink-a200);
+      color: white !important;
+    };
+    --paper-button-raised-keyboard-focus: {
+      background-color: var(--paper-pink-a200) !important;
+      color: white !important;
+    };
+    }
+    paper-button.custom:hover {
+    background-color: var(--paper-indigo-100);
+    }
+    paper-button.pink {
+    color: var(--paper-pink-a200);
+
+    }
+    paper-button.indigo {
+    background-color: var(--paper-indigo-500);
+    color: white;
+    --paper-button-raised-keyboard-focus: {
+      background-color: var(--paper-pink-a200) !important;
+      color: white !important;
+    };
+    }
+    paper-button.green {
+    background-color: var(--paper-green-500);
+    color: white;
+    }
+    paper-button.green[active] {
+    background-color: var(--paper-red-500);
+    }
+    paper-button.disabled {
+    color: white;
+    }
+  </style>
+    </style>
+
+    <h1>Enter the image name of image/ directory</h1>
+    <vaadin-upload max-files="1" accept="image/*" on-upload-success="uploadSuccess"></vaadin-upload>
+    <p>Add your description about the picture</p>
+    <paper-input id="desc" value="{{description}}" maxlength="140" on-input="_search"></paper-input>
+	<p>Characters left: {{CHARizard}} </p>
+	<br>
+    <paper-button raised on-click="_handleClick">Submit</paper-button>
+
+  </template>
+
+  <script>
+    class MyUploader extends Polymer.Element{
+      static get is(){return 'my-uploader';}
+
+      static get properties(){
+        return {
+          path: {type: String},
+          description: {type: String},
+		  CHARizard: {type: Number, value: 140}
+        }
+      }
+
+      uploadSuccess(e){
+        this.path = "image/" + e.detail.file.name;
+      }
+
+      _testClick(){
+        console.log("My File: " + this.path);
+      }
+
+      _handleClick(e){
+        MessageHolder.getInstance().add(this.description);
+        this.dispatchEvent(new CustomEvent('kick', {detail: {path: this.path, action: false}, bubbles: true, composed: true}));
+        this.path = "";
+        this.description = "";
+      }
+	  
+	  _search(){
+		this.CHARizard = 140 - this.$.desc.value.length;
+	  }
+	  
+
+    }
+
+    customElements.define(MyUploader.is, MyUploader);
+  </script>
+
+  <script>
+    function mockXhrGenerator(file) {
+      var xhr = new MockHttpRequest();
+      xhr.upload = {};
+      xhr.onsend = function() {
+        var total = file && file.size || 1024, done = 0;
+        function start() {
+          setTimeout(progress, 1000);
+        }
+        function progress() {
+          xhr.upload.onprogress({total: total, loaded: done});
+          if (done < total) {
+            setTimeout(progress, 200);
+            done = Math.min(total, done + 254000);
+          } else if (!file.abort) {
+            setTimeout(finish, 1000);
+          }
+        }
+        function finish() {
+          xhr.receive(200, '{"message":"OK"}');
+        }
+        start();
+      };
+      return xhr;
+    }
+
+    window.addEventListener('WebComponentsReady', function() {
+      // Monkey-patch vaadin-upload prototype to use MockHttpRequest
+      Object.getPrototypeOf(document.createElement('vaadin-upload'))._createXhr = mockXhrGenerator;
+    });
+</script>
+
+</dom-module>

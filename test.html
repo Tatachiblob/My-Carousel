@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tester</title>
+    <script src="MessageHolder.js"></script>
+    <script src="jquery.min.js"></script>
+  </head>
+  <body>
+    <p>Testing 1234. Check the console</p>
+    <button onclick="showNext()">Next</button>
+    <button onclick="showPrevious()">Previous</button><br><br>
+    <input type="file" id="myFile" size="50" accept=".png, .jpg">
+    <p id="path"></p>
+    <button onclick="demo()">Submit</button>
+  </body>
+  <script>
+    $(document).ready(function(){
+      console.log(MessageHolder.getInstance().get());
+    });
+
+    function demo(){
+      var x = document.getElementById("myFile").value;
+
+      document.getElementById("path").innerHTML = x;
+    }
+
+    function showNext(){
+      MessageHolder.getInstance().next();
+      console.log(MessageHolder.getInstance().get());
+    }
+
+    function showPrevious(){
+      MessageHolder.getInstance().previous();
+      console.log(MessageHolder.getInstance().get());
+    }
+  </script>
+</html>
