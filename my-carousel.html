@@ -240,6 +240,9 @@
                 this._translateX(this.selected, this.offsetWidth, true);
               }
               this.selected = prevChild;
+			  MessageHolder.getInstance().previous();
+			  console.log(MessageHolder.getInstance().get() + ":" + MessageHolder.getInstance().getCtr());
+			  this.dispatchEvent(new CustomEvent('kick', {detail: {path: "none", action: true}, bubbles: true, composed: true}));
             } else {
               this._translateX(prevChild, -this.offsetWidth, true);
               this._translateX(this.selected, 0, true);
@@ -255,6 +258,9 @@
                 this._translateX(nextChild, 0, true);
               }
               this.selected = nextChild;
+			  MessageHolder.getInstance().next();
+			  console.log(MessageHolder.getInstance().get() + ":" + MessageHolder.getInstance().getCtr());
+			  this.dispatchEvent(new CustomEvent('kick', {detail: {path: "none", action: true}, bubbles: true, composed: true}));
             } else {
               this._translateX(this.selected, 0, true);
               this._translateX(nextChild, this.offsetWidth, true);

@@ -4,7 +4,7 @@
 <link rel="import" href="bower_components/paper-button/paper-button.html">
 <script src="MessageHolder.js"></script>
 <script src="Mock.js"></script>
-<script src="jquery-3.2.1.min.js"></script>    
+<script src="jquery-3.2.1.min.js"></script>
 <dom-module id="my-uploader">
   <template>
 
@@ -50,10 +50,10 @@
   </style>
     </style>
 
-    <h1>Enter the image name of image/ directory</h1>
+    <h1>Drop Down or Select from the imgage directory</h1>
     <vaadin-upload max-files="1" accept="image/*" on-upload-success="uploadSuccess"></vaadin-upload>
     <p>Add your description about the picture</p>
-    <paper-input id="desc" value="{{description}}" maxlength="140" on-input="_search"></paper-input>
+    <paper-input id="desc" value="{{description}}" maxlength="80" on-input="_search"></paper-input>
 	<p>Characters left: {{CHARizard}} </p>
 	<br>
     <paper-button raised on-click="_handleClick">Submit</paper-button>
@@ -68,7 +68,7 @@
         return {
           path: {type: String},
           description: {type: String},
-		  CHARizard: {type: Number, value: 140}
+		  CHARizard: {type: Number, value: 80}
         }
       }
 
@@ -86,11 +86,11 @@
         this.path = "";
         this.description = "";
       }
-	  
+
 	  _search(){
-		this.CHARizard = 140 - this.$.desc.value.length;
+		this.CHARizard = 80 - this.$.desc.value.length;
 	  }
-	  
+
 
     }
 

@@ -28,8 +28,8 @@
         position: absolute;
         width: 50vw;
       }
-	  
-	  
+
+
 	  .parent{
 		position: relative;
 		display:block;
@@ -39,7 +39,7 @@
 		height:28vw;
 		background-color:black;
 	  }
-	  
+
 	  .carousel-message{
 		position: absolute;
 		right: 0;
@@ -54,22 +54,68 @@
 		margin-right:auto;
 		width:50vw;
 	  }
+	  .hidden{
+		display:none;
+	  }
     </style>
 
-	<div class="parent">
+<style is="custom-style">
+  paper-button.custom {
+    --paper-button-ink-color: var(--paper-pink-a200);
+    /* These could also be individually defined for each of the
+      specific css classes, but we'll just do it once as an example */
+    --paper-button-flat-keyboard-focus: {
+      background-color: var(--paper-pink-a200);
+      color: white !important;
+    };
+    --paper-button-raised-keyboard-focus: {
+      background-color: var(--paper-pink-a200) !important;
+      color: white !important;
+    };
+  }
+  paper-button.custom:hover {
+    background-color: var(--paper-indigo-100);
+  }
+  paper-button.pink {
+    color: var(--paper-pink-a200);
+
+  }
+  paper-button.indigo {
+    background-color: var(--paper-indigo-500);
+    color: white;
+	margin-left:10px;
+    --paper-button-raised-keyboard-focus: {
+      background-color: var(--paper-pink-a200) !important;
+      color: white !important;
+    };
+  }
+  paper-button.green {
+    background-color: var(--paper-green-500);
+    color: white;
+  }
+  paper-button.indigo[active] {
+    background-color: var(--paper-red-500);
+  }
+  paper-button.disabled {
+    color: white;
+  }
+</style>
+
+	<div class="parent" id="wannabe">
     <my-carousel id="yuta">
       <img data-src="image/wallpaper1.jpg">
       <img data-src="image/wallpaper2.jpg">
       <img data-src="image/wallpaper3.jpg">
       <img data-src="image/wallpaper4.jpg">
-	  
+
     </my-carousel>
 
 	<div class="carousel-message"><p>{{message}}</p></div>
 	</div>
-    <my-uploader></my-uploader>
+	<paper-button toggles raised class="indigo" on-click="_spicegirls" id="hoobastank">edit mode</paper-button>
+    <my-uploader id="stoprightnow" class="hidden"></my-uploader>
   </template>
-
+  <script src="jquery-3.2.1.min.js"></script>
   <script>
     class MyMessage extends Polymer.Element{
       static get is(){return 'my-message';}
@@ -86,6 +132,19 @@
         super.ready();
         this.message = MessageHolder.getInstance().get();
       }
+
+	  _spicegirls(){
+		if(this.$.hoobastank.innerHTML == "edit mode"){
+			this.$.wannabe.classList.add('hidden');
+			this.$.hoobastank.innerHTML = "view mode";
+			this.$.stoprightnow.classList.remove('hidden')
+			}
+		else{
+			this.$.stoprightnow.classList.add('hidden');
+			this.$.hoobastank.innerHTML = "edit mode";
+			this.$.wannabe.classList.remove('hidden')
+		}
+	  }
 
     }
 
